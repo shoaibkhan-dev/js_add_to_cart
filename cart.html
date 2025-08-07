@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Cart</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://kit.fontawesome.com/92d70a2fd8.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="header">
+    <p class="logo">GadgetAura</p>
+    <a href="index.html" class="back-btn">← Back to Products</a>
+  </div>
+
+  <div class="container">
+    <div class="sidebar" style="width: 100%;">
+      <div class="head">
+        <p>My Cart</p>
+      </div>
+      <div id="cartItem">Loading...</div>
+      <div class="foot">
+        <h3>Total</h3>
+        <h2 id="total">$0.00</h2>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    function delElement(a) {
+      cart.splice(a, 1);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      displaycart();
+    }
+
+    function displaycart() {
+      let total = 0;
+      let j = 0;
+
+      if (cart.length === 0) {
+        document.getElementById('cartItem').innerHTML = "Your cart is empty";
+        document.getElementById("total").innerHTML = "$0.00";
+        return;
+      }
+
+      document.getElementById("cartItem").innerHTML = cart.map((item) => {
+        total += item.price;
+        return `
+          <div class='cart-item'>
+            <div class='row-img'>
+              <img class='rowimg' src="${item.image}">
+            </div>
+            <p style='font-size:12px;'>${item.title}</p>
+            <h2 style='font-size: 15px;'>$ ${item.price}.00</h2>
+            <i class='fa-solid fa-trash' onclick='delElement(${j++})'></i>
+          </div>`;
+      }).join('');
+
+      document.getElementById("total").innerHTML = "$" + total.toFixed(2);
+    }
+
+    displaycart();
+  </script>
+</body>
+</html>
